@@ -5,7 +5,9 @@ const {
     getProducts,
     addProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    createUser,
+    lastUser
 } = require("./controller/controller")
 
 console.log("--------inside the index/product/routes ---->")
@@ -14,5 +16,7 @@ router.get("/", getProducts)                    //localhost:7000/api/v1/modules/
 router.post("/", addProduct)
 router.put("/", updateProduct)
 router.delete("/", deleteProduct)
+router.get("/user", lastUser)
+router.post("/user", createUser)
 
 module.exports = router;

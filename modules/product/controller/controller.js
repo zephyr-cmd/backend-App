@@ -6,7 +6,9 @@ const {
   getProductSer,
   addProductSer,
   updateProductSer,
-  deleteProductSer
+  deleteProductSer,
+  createUserSer,
+  lastUserSer
 } = require("../services/apiServices");
 
 const getProducts = async (req, res) => {
@@ -49,10 +51,32 @@ const deleteProduct = async (req, res) => {
     return sendErrorResponse(res, err);
   }
 };
+const createUser = async (req, res) => {
+  try {
+    console.log("inside the createUser / controller--->");
+    const data = await createUserSer(req);
+    return sendSuccessResponse(res, data);
+  } catch (err) {
+    console.log("inside the createUser /product Error--->", err.message);
+    return sendErrorResponse(res, err);
+  }
+};
+const lastUser = async (req, res) => {
+  try {
+    console.log("inside the createUser / controller--->");
+    const data = await lastUserSer(req);
+    return sendSuccessResponse(res, data);
+  } catch (err) {
+    console.log("inside the createUser /product Error--->", err.message);
+    return sendErrorResponse(res, err);
+  }
+};
 
 module.exports = {
   getProducts,
   addProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  createUser,
+  lastUser
 };

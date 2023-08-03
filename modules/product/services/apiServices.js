@@ -1,5 +1,6 @@
 const axios = require("axios");
 const ProductsModel = require("../../../model/product");
+const UserModel = require("../../../model/user")
 
 const getProductSer = async (req) => {
     return new Promise(async (resolve, reject) => {
@@ -98,11 +99,67 @@ const deleteProductSer = async (req) => {
             })
         }
     })
+};
+const lastUserSer = async (req) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // console.log("L-105, createUser", req.body)
+            // let {name, email, phone, city} = req.body;
+            const lastUser = await UserModel.findOne().sort({createdAt:-1})
+            console.log("lastUser------------->", lastUser)
+            if (lastUser) {
+                return resolve({
+                    status: 200,
+                    message: "Successfully created user",
+                    data: lastUser
+                })
+            }
+        } catch (err) {
+            console.log("error--->", err);
+            return reject({
+                status: 503,
+                message: err.message,
+                data: err
+            })
+        }
+    })
+}
+const createUserSer = async (req) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log("L-105, createUser", req.body)
+            let {name, email, phone, city} = req.body;
+            const createdUser = await UserModel.create(req.body);
+            if (createdUser) {
+                return resolve({
+                    status: 200,
+                    message: "Successfully created user",
+                    data: {
+                        details : createdUser
+                    }
+                })
+            } else {
+                return reject({
+                    status: 404,
+                    message: "No product found in the DB"
+                })
+            }
+        } catch (err) {
+            console.log("error--->", err);
+            return reject({
+                status: 503,
+                message: err.message,
+                data: err
+            })
+        }
+    })
 }
 
 module.exports = {
     getProductSer,
     addProductSer,
     updateProductSer,
-    deleteProductSer
+    deleteProductSer,
+    createUserSer,
+    lastUserSer
 }
