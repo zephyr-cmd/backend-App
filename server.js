@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const dotenv = require('dotenv').config({ path: './config.env' });
 const colors = require('colors');
 
@@ -10,7 +9,7 @@ process.on('uncaughtException', (error) => {
   process.exit(1); //  emidiatly exists all from all the requests
 });
 
-const {app,io} = require('./app');
+const { app, io, httpServer } = require('./app');
 // var server = http.createServer(app);
 // Pass a http.Server instance to the listen method
 // database connection
@@ -18,7 +17,7 @@ DBConnect();
 console.log("process.env.NODE_ENV : ",process.env.NODE_ENV)
 // server
 const port = process.env.PORT || 7000;
-const server = app.listen(port, () => {
+const server = httpServer.listen(port, () => {
   console.log(`App is running on port ${port}`.yellow.bold);
 });
 

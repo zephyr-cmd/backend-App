@@ -1,17 +1,38 @@
 const express = require("express");
-var http = require('http');
 const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
 const path = require("path");
-const hpp = require("hpp");
+// const helmet = require("helmet");
+const { Server } = require("socket.io");
 
+
+// const { createServer } = require("http");
+// const httpServer = createServer(app);                        // M-0   Methods to create http server
+// var httpServer = require("http").Server(app);                // M-1    
+const httpServer = require("http").createServer(app);           // M-2
+//attached http server to the socket io
+const io = new Server(httpServer, {
+  /* options */
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+// var io = require("socket.io")(http);
+// const io = require("socket.io")(httpServer, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST"],
+//   },
+// });
+require('./utils/socket')(io)                               // event Listner for socket connection
 
 // view engine setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 
 // var whitelist = ['http://example1.com', 'http://example2.com']
 // var corsOptions = {
@@ -27,7 +48,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.json());
 
-console.log("L-32, node environment : ", process.env.NODE_ENV);
+console.log("L-56, node environment : ", process.env.NODE_ENV);
 
 // set security http headers
 // app.use(helmet());
@@ -70,4 +91,4 @@ app.use("/api/v1/modules", require("./modules"));
 
 // error handling middleware
 // app.use(globalErrorHandler);
-module.exports = {app};
+module.exports = { app, io, httpServer };
